@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Women Empowerment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            color: #333;
+            margin: 0;
+        }
+
+        nav {
+            background-color: #f4a9c1; 
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        h2 {
+            text-align: center;
+            color: #f4a9c1;
+            margin-top: 20px;
+        }
+
+        #quiz, #salary-simulator, #resume-builder {
+            margin: 20px auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form input, form button, form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        form button {
+            background-color: #f4a9c1;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #e883a1;
+        }
+
+        #negotiation-feedback {
+            margin-top: 20px;
+            text-align: center;
+            padding: 10px;
+            background-color: #f4a9c1;
+            color: white;
+            border-radius: 5px;
+        }
+
+        #resume-form {
+            margin: 20px;
+        }
+
+        #resume-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        #resume-form input,
+        #resume-form textarea {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        #resume-output {
+            background: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+  
+    <nav>
+        <ul>
+            <li><a href="#quiz">Passion Quiz</a></li>
+            <li><a href="#salary-simulator">Salary Negotiation</a></li>
+            <li><a href="#resume-builder">Resume & Portfolio Builder</a></li>
+        </ul>
+    </nav>
+
+    <section id="quiz">
+        <h2>Discover Your Passion or Skill</h2>
+        <form id="quiz-form">
+            <label for="passion">What's your passion or skill?</label>
+            <input type="text" id="passion" name="passion" placeholder="e.g., Writing, Coding, Teaching" required>
+            <button type="submit">Get Job Suggestion</button>
+        </form>
+        <div id="job-result"></div>
+    </section>
+
+    <section id="salary-simulator">
+        <h2>Salary Negotiation Simulator</h2>
+        <button onclick="startSimulation()">Start Negotiation</button>
+        <div id="negotiation-feedback"></div>
+        <div id="response-section" style="display:none;">
+            <h3>Your Response:</h3>
+            <textarea id="user-response" placeholder="Write your response here..." rows="4"></textarea>
+            <button onclick="submitResponse()">Submit Response</button>
+        </div>
+        <div id="response-result" style="display:none;">
+            <h3>Your Response:</h3>
+            <p id="user-submission"></p>
+            <h3>Suggested Response:</h3>
+            <p id="suggested-response"></p>
+        </div>
+    </section>
+
+    <section id="resume-builder">
+        <h2>Resume & Portfolio Builder</h2>
+        <form id="resume-form">
+            <div id="step-1">
+                <h3>Step 1: Personal Details</h3>
+                <label for="name">Full Name</label>
+                <input type="text" id="name" required>
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+                <label for="phone">Phone</label>
+                <input type="text" id="phone" required>
+                <button type="button" onclick="nextStep(2)">Next</button>
+            </div>
+
+            <div id="step-2" style="display: none;">
+                <h3>Step 2: Work Experience</h3>
+                <textarea id="experience" placeholder="Job title, company, duration, responsibilities" required></textarea>
+                <button type="button" onclick="nextStep(3)">Next</button>
+            </div>
+
+            <div id="step-3" style="display: none;">
+                <h3>Step 3: Skills & Certifications</h3>
+                <textarea id="skills" placeholder="List your skills and certifications" required></textarea>
+                <button type="button" onclick="generateResume()">Generate Resume</button>
+            </div>
+        </form>
+        <div id="resume-output" style="display: none;">
+            <h3>Your Generated Resume</h3>
+            <div id="resume-content"></div>
+            <button onclick="downloadResume()">Download PDF</button>
+        </div>
+    </section>
+
+    <script>
+        // Job suggestion functionality
+        document.getElementById('quiz-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form submission
+            
+            const passion = document.getElementById('passion').value.trim();
+            const jobResult = document.getElementById('job-result');
+
+            if (!passion) {
+                jobResult.innerHTML = `<p>Please enter your passion or skill.</p>`;
+                return;
+            }
+
+            // Example job suggestions (you can add more)
+            const jobSuggestions = {
+                writing: "Content Writer, Copywriter, or Blogger",
+                coding: "Software Developer, Data Scientist, or Web Developer",
+                teaching: "Teacher, Educational Consultant, or Tutor",
+                art: "Graphic Designer, Illustrator, or Art Director",
+                video_editing: "Video Editor, Motion Graphics Artist, Video Production Specialist",
+                event_planning: "Event Coordinator, Wedding Planner, Corporate Event Manager",
+        project_management: "Project Manager, Operations Manager, Product Manager",
+        finance: "Financial Analyst, Accountant, Investment Banker",
+        healthcare: "Nurse, Healthcare Administrator, Medical Researcher",
+        writing_and_editing: "Content Writer, Editor, Proofreader",
+        web_design: "Web Designer, Front-End Developer, Web Developer",
+        seo: "SEO Specialist, Digital Marketing Expert, SEM Specialist",
+        data_analysis: "Data Analyst, Data Scientist, Business Intelligence Analyst",
+        software_testing: "Software Tester, QA Engineer, Automation Tester",
+        app_development: "Mobile App Developer, iOS Developer, Android Developer",
+        music: "Musician, Composer, Music Producer",
+        translation: "Translator, Interpreter, Localization Specialist",
+        teaching_english: "ESL Teacher, English Tutor, Educational Consultant",
+        video_editing: "Video Editor, Motion Graphics Artist, Video Production Specialist",
+        event_planning: "Event Coordinator, Wedding Planner, Corporate Event Manager",
+        graphic_design: "Graphic Designer, UI/UX Designer, Visual Artist",
+        photography: "Photographer, Photo Editor, Event Photographer",
+        marketing: "Marketing Specialist, Brand Manager, Social Media Manager",
+
+
+            };
+
+            const suggestion = jobSuggestions[passion.toLowerCase()] || "Entrepreneur, Freelancer, or Consultant in your field";
+            jobResult.innerHTML = `<p>Based on your skill, we suggest: <strong>${suggestion}</strong></p>`;
+        });
+
+        function startSimulation() {
+            const feedbackDiv = document.getElementById('negotiation-feedback');
+            const scenarios = [
+                "Your employer offers $50,000. Counter with $60,000 and explain why you’re worth it.",
+                "They offer a lower salary but promise growth opportunities. Negotiate for additional benefits like bonuses.",
+                "You're offered $45,000. Ask for $50,000 and highlight your skills and experience."
+            ];
+
+        
+            const randomScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+            feedbackDiv.innerHTML = `
+                <p><strong>Scenario:</strong> ${randomScenario}</p>
+                <p>Practice your negotiation and refine your skills!</p>
+            `;
+            document.getElementById("response-section").style.display = "block";
+        }
+
+        function submitResponse() {
+            const userResponse = document.getElementById('user-response').value;
+            const suggestedResponseDiv = document.getElementById('suggested-response');
+            const userSubmissionDiv = document.getElementById('user-submission');
+
+            // Here we show the user’s response and suggest a better one
+            userSubmissionDiv.innerHTML = `<p>${userResponse}</p>`;
+
+            const suggestions = {
+                "50,000": "You could say: 'I believe my experience and skills justify a higher salary, and I would like to request $60,000.'",
+                "growth opportunities": "You could say: 'I appreciate the opportunity for growth, but I would like to have a clear salary package that reflects my current skills.'",
+                "45,000": "You could say: 'Based on my experience, I believe $50,000 is more appropriate for this role. Can we discuss this?'"
+            };
+
+            let suggestion = "You could say: 'I'm confident in my ability to bring value to the company and would appreciate a higher offer.'"; // Default suggestion
+
+            if (userResponse.includes("50,000")) {
+                suggestion = suggestions["50,000"];
+            } else if (userResponse.includes("growth opportunities")) {
+                suggestion = suggestions["growth opportunities"];
+            } else if (userResponse.includes("45,000")) {
+                suggestion = suggestions["45,000"];
+            }
+
+            suggestedResponseDiv.innerHTML = `<p><strong>Suggested Response:</strong> ${suggestion}</p>`;
+            document.getElementById("response-result").style.display = "block";
+        }
+
+
+        function nextStep(step) {
+
+            document.querySelectorAll("#resume-form > div").forEach(div => div.style.display = "none");
+
+            document.getElementById(`step-${step}`).style.display = "block";
+        }
+
+        function generateResume() {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+            const experience = document.getElementById("experience").value;
+            const skills = document.getElementById("skills").value;
+
+            const resumeContent = `
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Phone:</strong> ${phone}</p>
+                <p><strong>Work Experience:</strong> ${experience}</p>
+                <p><strong>Skills & Certifications:</strong> ${skills}</p>
+            `;
+            document.getElementById("resume-content").innerHTML = resumeContent;
+            document.getElementById("resume-output").style.display = "block";
+        }
+
+        function downloadResume() {
+            const resumeContent = document.getElementById("resume-content").innerHTML;
+            const blob = new Blob([resumeContent], { type: "text/html" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "resume.html";
+            link.click();
+        }
+    </script>
+</body>
+</html>
